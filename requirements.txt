@@ -1,0 +1,5 @@
+cmasher==1.7.2
+tqdm==4.65.0
+numpy==1.26.3
+astropy==5.3.4
+matplotlib==3.8.0
