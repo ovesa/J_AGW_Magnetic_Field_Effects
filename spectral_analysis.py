@@ -189,7 +189,7 @@ def azimuthal_averaging(mid_time, end_time, array, mid_space, radial_meshgrid):
         azim = np.zeros([mid_space, mid_time + 1])
 
     # Copy array
-    coparr = copy.deepcopy(array)
+    coparr = copy.copy(array)
 
     # Pixel size to azimuthally average over
     w = 0.5
