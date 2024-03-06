@@ -43,13 +43,17 @@ def inds_on_mag(magnetogram, locs):
     return ibis_abs
 
 
-def masked_magnetic_maps(magnetogram_array, mask_value):
+def masked_magnetic_maps(magnetogram_array, mask_value, fill_value=np.nan):
     """
     Mask the magnetogram based on the chosen value.
 
     Arguments:
         magnetogram_array -- The magnetogram time series
         mask_value -- The chosen value for the masking process [G]
+
+    Keyword Arguments:
+        fill_value -- Replace masked data with value (default: {np.nan})
+
 
     Returns:
         The masked magnetogram larger than the chosen value and the
@@ -61,13 +65,18 @@ def masked_magnetic_maps(magnetogram_array, mask_value):
 
     # Masked magnetogram less than or equal to the chosen value
     magnetic_map = ma.masked_less_equal(cop_mag, mask_value, copy=True)
+    ma.set_fill_value(magnetic_map, fill_value)
 
     # Masked magnetogram greater than the chosen value
     nonmagnetic_map = ma.masked_greater(cop_mag, mask_value, copy=True)
+    ma.set_fill_value(nonmagnetic_map, fill_value)
+
     return magnetic_map, nonmagnetic_map
 
 
-def masked_IBIS_cubes_based_on_masked_magnetogram(diagnostic_map, magnetic_map_mask):
+def masked_IBIS_cubes_based_on_masked_magnetogram(
+    diagnostic_map, magnetic_map_mask, fill_value=np.nan
+):
     """
     Mask the pixels in the IBIS map that corresponds to the masked magnetogram
     that is less than or equal to the chosen magnetic value.
@@ -75,6 +84,9 @@ def masked_IBIS_cubes_based_on_masked_magnetogram(diagnostic_map, magnetic_map_m
     Arguments:
         diagnostic_map -- IBIS diagnostic map to mask
         magnetic_map_mask -- Masked magnetogram
+
+    Keyword Arguments:
+        fill_value -- Replace masked data with value (default: {np.nan})
 
     Returns:
         The masked IBIS diagnostic map corresponding
@@ -88,6 +100,7 @@ def masked_IBIS_cubes_based_on_masked_magnetogram(diagnostic_map, magnetic_map_m
 
     # Mask IBIS diagnostic map
     masked_cube = np.ma.masked_array(
-        coparr, mask=grab_mask, fill_value=0, hard_mask=True
+        coparr, mask=grab_mask, fill_value=fill_value, hard_mask=True
     )
+
     return masked_cube
