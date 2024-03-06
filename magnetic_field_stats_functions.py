@@ -17,7 +17,7 @@ def compute_magnetic_nonmagnetic_inds(magnetogram, mag_val):
     locs_below_med = indices of pixels below the mag_val
     """
 
-    magmap = np.abs(copy.deepcopy(magnetogram))
+    magmap = np.abs(copy.copy(magnetogram))
 
     locs_above_med = np.where((magmap) >= mag_val)
     locs_below_med = np.where((magmap) < mag_val)
@@ -38,7 +38,7 @@ def inds_on_mag(magnetogram, locs):
     Output:
     ibis_abs = masked array [3D datacube]
     """
-    ibis_abs = np.abs(copy.deepcopy(magnetogram))
+    ibis_abs = np.abs(copy.copy(magnetogram))
     ibis_abs[locs] = 0
     return ibis_abs
 
@@ -61,7 +61,7 @@ def masked_magnetic_maps(magnetogram_array, mask_value, fill_value=np.nan):
     """
 
     # Copy magnetogram
-    cop_mag = np.abs(copy.deepcopy(magnetogram_array))
+    cop_mag = np.abs(copy.copy(magnetogram_array))
 
     # Masked magnetogram less than or equal to the chosen value
     magnetic_map = ma.masked_less_equal(cop_mag, mask_value, copy=True)
@@ -93,10 +93,10 @@ def masked_IBIS_cubes_based_on_masked_magnetogram(
     """
 
     # Copy IBIS diagnostic map
-    coparr = copy.deepcopy(diagnostic_map)
+    coparr = copy.copy(diagnostic_map)
 
     # Obtain mask corresponding the magnetogram
-    grab_mask = np.ma.getmask(copy.deepcopy(magnetic_map_mask))
+    grab_mask = np.ma.getmask(copy.copy(magnetic_map_mask))
 
     # Mask IBIS diagnostic map
     masked_cube = np.ma.masked_array(
